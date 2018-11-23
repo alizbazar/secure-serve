@@ -1,12 +1,19 @@
 {
-  "name": "meru-uploader",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "secure-serve",
+  "version": "1.0.1",
+  "main": "serve.js",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "localtunnel": "^1.9.1",
     "meow": "^5.0.0",
     "uuid": "^3.3.2"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/alizbazar/secure-serve.git"
+  },
+  "engines": {
+    "node": ">=8.0"
   }
 }
