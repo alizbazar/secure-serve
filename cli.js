@@ -11,7 +11,8 @@ const cli = meow(`
     $ secure-serve <file>
 
   Options
-    --port, -p  Port number to serve through on localhost
+    --port, -p       Port number to serve through on localhost
+    --url-token, -u  Allow passing authorization token via ?t=... URL parameter
 
   Examples
     $ node secure-serve content.json
@@ -20,6 +21,10 @@ const cli = meow(`
     port: {
       type: 'string',
       alias: 'p',
+    },
+    'url-token': {
+      type: 'boolean',
+      alias: 'u',
     },
   },
 })
@@ -62,8 +67,13 @@ function startTunnel () {
       exitWithErrors('Tunnel could not be established', err)
     }
 
-    console.log('\nServing file successfully. To download elsewhere, run:\n')
-    console.log(`\tcurl -H "Authorization: Bearer ${authorizationKey}" ${tunnel.url}/get > "${path.basename(filename)}"\n`)
+    if (cli.flags.urlToken) {
+      console.log('\nServing file successfully. To download elsewhere, use:\n')
+      console.log(`\t${tunnel.url}/get?t=${authorizationKey}\n`)
+    } else {
+      console.log('\nServing file successfully. To download elsewhere, run:\n')
+      console.log(`\tcurl -H "Authorization: Bearer ${authorizationKey}" ${tunnel.url}/get > "${path.basename(filename)}"\n`)
+    }
   })
 }
 
@@ -93,6 +103,9 @@ function authorize (req, res, next) {
   const m = authorizationPattern.exec(req.headers.authorization || '')
   const receivedKey = m && m[1]
   if (receivedKey && receivedKey === authorizationKey) {
+    return next()
+  }
+  if (cli.flags.urlToken && req.query.t && req.query.t === authorizationKey) {
     return next()
   }
   res.status(401).send('Unauthorized')
