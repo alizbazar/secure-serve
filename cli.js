@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const express = require('express')
 const localtunnel = require('localtunnel')
 const uuid = require('uuid/v4')
@@ -7,13 +8,13 @@ const meow = require('meow')
 
 const cli = meow(`
   Usage
-    $ node serve.js <file>
+    $ secure-serve <file>
 
   Options
     --port, -p  Port number to serve through on localhost
 
   Examples
-    $ node serve.js content.json
+    $ node secure-serve content.json
 `, {
   flags: {
     port: {

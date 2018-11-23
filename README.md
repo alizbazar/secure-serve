@@ -6,13 +6,21 @@ This allows downloading the file elsewhere on the internet with `Authorization` 
 
 Note: Do not use for highly sensitive content as the traffic is routed through [localtunnel.me](https://localtunnel.me), which may pose a security risk.
 
+## Installation:
+
+```
+$ npm install -g secure-serve
+```
+
+## Usage:
+
 ```
 Usage
-  $ node serve.js <file>
+  $ secure-serve <file>
 
 Options
   --port, -p  Port number to serve through on localhost
 
 Examples
-  $ node serve.js content.json 
+  $ secure-serve content.json
 ```
