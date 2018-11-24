@@ -15,7 +15,7 @@ const cli = meow(`
     --url-token, -u  Allow passing authorization token via ?t=... URL parameter
 
   Examples
-    $ node secure-serve content.json
+    $ secure-serve content.json
 `, {
   flags: {
     port: {

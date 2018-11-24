@@ -23,5 +23,5 @@ Options
   --url-token, -u  Allow authorizing via ?t=... URL parameter
 
 Examples
-  $ node secure-serve content.json
+  $ secure-serve content.json
 ```
