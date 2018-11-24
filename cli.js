@@ -29,13 +29,6 @@ const cli = meow(`
   },
 })
 
-function exitWithErrors (...errors) {
-  errors.forEach(err => {
-    console.error(err)
-  })
-  process.exit(1)
-}
-
 const authorizationKey = uuid()
 const [filename] = cli.input
 const port = cli.flags.port || 5002
@@ -113,4 +106,11 @@ function authorize (req, res, next) {
 
 function getFile (res, res) {
   res.send(fileContent)
+}
+
+function exitWithErrors (...errors) {
+  errors.forEach(err => {
+    console.error(err)
+  })
+  process.exit(1)
 }

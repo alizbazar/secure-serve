@@ -2,7 +2,7 @@
 
 Serve a file using [localtunnel](https://github.com/localtunnel/localtunnel) with randomly generated authorization token.
 
-This allows downloading the file elsewhere on the internet with `Authorization` header or `t=...` query parameter. Useful for passing content to a server or to another user on the internet without uploading the file.
+This allows downloading the file elsewhere on the internet with `Authorization` header or `?t=...` query parameter. Useful for passing content to a server or to another user on the internet without uploading the file.
 
 Note: Do not use for highly sensitive content as the traffic is routed through [localtunnel.me](https://localtunnel.me), which may pose a security risk.
 
