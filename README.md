@@ -4,7 +4,7 @@ Serve a file using [localtunnel](https://github.com/localtunnel/localtunnel) wit
 
 This allows downloading the file elsewhere on the internet with `Authorization` header or `?t=...` query parameter. Useful for passing content to a server or to another user on the internet without uploading the file.
 
-Note: Do not use for highly sensitive content as the traffic is routed through [localtunnel.me](https://localtunnel.me), which may pose a security risk.
+**NOTE:** DO NOT USE `url-token` or `auth-token` options for highly sensitive content. Using these options payload is transferred plain text through localtunnel.me.
 
 ## Installation:
 
@@ -19,8 +19,9 @@ Usage
   $ secure-serve <file>
 
 Options
-  --port, -p       Port number to serve through on localhost
-  --url-token, -u  Allow authorizing via ?t=... URL parameter
+  --port, -p        Port number to serve through on localhost
+  --url-token, -u   Allow authorizing via ?t=... URL parameter
+  --auth-token, -a  Allow authorizing using header 'Authorization: Bearer xxx'
 
 Examples
   $ secure-serve content.json

@@ -5,6 +5,7 @@ const uuid = require('uuid/v4')
 const fs = require('fs')
 const path = require('path')
 const meow = require('meow')
+const crypto = require('crypto')
 
 const cli = meow(`
   Usage
@@ -26,10 +27,15 @@ const cli = meow(`
       type: 'boolean',
       alias: 'u',
     },
+    'auth-token': {
+      type: 'boolean',
+      alias: 'a',
+    },
   },
 })
 
 const authorizationKey = uuid()
+const encryptionKey = uuid()
 const [filename] = cli.input
 const port = cli.flags.port || 5002
 
@@ -37,9 +43,16 @@ if (!filename) {
   exitWithErrors('Error: <targetFile> was empty.\n\nLaunch with node serve.js <targetFile>')
 }
 
-const fileContent = fs.readFileSync(path.resolve(filename), 'utf8')
+let fileContent = fs.readFileSync(path.resolve(filename), 'utf8')
 if (!fileContent) {
   exitWithErrors('File content was empty or file did not exist')
+}
+
+if (!cli.flags.urlToken && !cli.authToken) {
+  // encrypt content
+  const cipher = crypto.createCipher('aes-256-cbc', encryptionKey)
+  const encrypted = Buffer.concat([cipher.update(new Buffer(fileContent, "utf8")), cipher.final()])
+  fileContent = encrypted.toString('base64')
 }
 
 const app = express()
@@ -61,11 +74,40 @@ function startTunnel () {
     }
 
     if (cli.flags.urlToken) {
-      console.log('\nServing file successfully. To download elsewhere, use:\n')
+      console.log('\nServing file successfully using least secure option.\n\nTo download elsewhere, use:\n')
       console.log(`\t${tunnel.url}/get?t=${authorizationKey}\n`)
-    } else {
-      console.log('\nServing file successfully. To download elsewhere, run:\n')
+    } else if (cli.flags.authToken) {
+      console.log('\nServing file successfully. Note: plain text content is visible to localtunnel.me.\n\nTo download elsewhere, run:\n')
       console.log(`\tcurl -H "Authorization: Bearer ${authorizationKey}" ${tunnel.url}/get > "${path.basename(filename)}"\n`)
+    } else {
+      console.log('\nServing file successfully. Content is encrypted.\n\nTo download elsewhere, run:\n')
+      console.log(`
+--------
+const crypto = require('crypto')
+const request = require('request')
+
+// NOTE: pass keys through cli argument process.argv[2]
+//       or via environment variable
+const [authorizationKey, encryptionKey] = '${authorizationKey}:${encryptionKey}'.split(':')
+
+request({
+  url: '${tunnel.url}/get',
+  headers: {
+    'Authorization': ['Bearer', authorizationKey].join(' '),
+  },
+}, function (err, res, body) {
+  if (err) {
+    return console.log('Error occurred', err)
+  }
+  const decipher = crypto.createDecipher('aes-256-cbc', encryptionKey)
+  const decrypted = Buffer.concat([decipher.update(Buffer.from(body, 'base64')), decipher.final()])
+  const content = decrypted.toString('utf8')
+
+  console.log('Decrypted content - do what you want:')
+  console.log(content)
+})
+--------
+      `)
     }
   })
 }
