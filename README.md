@@ -1,6 +1,6 @@
-# Serve local file securely online
+# Serve local file securely online in enrypted form
 
-Serve a file using [localtunnel](https://github.com/localtunnel/localtunnel) with randomly generated authorization token.
+Serve a file using [localtunnel](https://github.com/localtunnel/localtunnel) encrypted with randomly generated authorization token.
 
 This allows downloading the file elsewhere on the internet with `Authorization` header or `?t=...` query parameter. Useful for passing content to a server or to another user on the internet without uploading the file.
 
@@ -20,8 +20,8 @@ Usage
 
 Options
   --port, -p        Port number to serve through on localhost
-  --url-token, -u   Allow authorizing via ?t=... URL parameter
-  --auth-token, -a  Allow authorizing using header 'Authorization: Bearer xxx'
+  --url-token, -u   Allow authorizing via ?t=... URL parameter. Disables file encryption.
+  --auth-token, -a  Allow authorizing using header 'Authorization: Bearer xxx'. Disables file encryption.
 
 Examples
   $ secure-serve content.json
