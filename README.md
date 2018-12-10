@@ -1,4 +1,4 @@
-# Serve local file securely online in enrypted form
+# Serve local file securely online in encrypted form
 
 Serve a file using [localtunnel](https://github.com/localtunnel/localtunnel) encrypted with randomly generated authorization token.
 
