@@ -4,7 +4,7 @@
   "main": "serve.js",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "localtunnel": "^1.9.1",
     "meow": "^5.0.0",
     "uuid": "^3.3.2"
